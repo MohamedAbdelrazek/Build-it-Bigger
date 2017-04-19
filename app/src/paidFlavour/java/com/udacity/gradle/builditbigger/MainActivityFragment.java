@@ -93,7 +93,7 @@ public class MainActivityFragment extends Fragment {
             String joke = params[0].second;
 
             try {
-                return myApiService.sayHi(joke).execute().getData();
+                return myApiService.getJoke(joke).execute().getData();
             } catch (IOException e) {
                 return e.getMessage();
             }
