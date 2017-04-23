@@ -20,7 +20,7 @@ public class EndpointAsyncTask extends AsyncTask<OnJokeReceivedListener, Void, S
     protected String doInBackground(OnJokeReceivedListener... params) {
         if (myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                    .setRootUrl("http://10.0.2.200:8080/_ah/api/");
+                    .setRootUrl("http://10.0.0.2:8080/_ah/api/");
 
             myApiService = builder.build();
         }
