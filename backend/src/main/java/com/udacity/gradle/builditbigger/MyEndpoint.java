@@ -6,11 +6,10 @@
 
 package com.udacity.gradle.builditbigger;
 
+import com.example.Joker;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
-
-import javax.inject.Named;
 
 /**
  * An endpoint class we are exposing
@@ -29,10 +28,11 @@ public class MyEndpoint {
     /**
      * A simple endpoint method that takes a name and says Hi back
      */
-    @ApiMethod(name = "getJoke")
-    public MyBean getJoke(@Named("joke") String joke) {
+    @ApiMethod(name = "tellJoke")
+    public MyBean tellJoke() {
         MyBean response = new MyBean();
-        response.setData(joke);
+        Joker joker = new Joker();
+        response.setData(joker.getJoke());
         return response;
     }
 
