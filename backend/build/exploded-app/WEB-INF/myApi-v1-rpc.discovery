@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"RnkXbyw9us4_w3H-FU6An0C4oYs/6R9Ggp81H2Ik9UqQO8KopEi4poI\"",
+ "etag": "\"RnkXbyw9us4_w3H-FU6An0C4oYs/FQYppDvwhj3M8F8-cdtJM1GRqtA\"",
  "discoveryVersion": "v1",
  "id": "myApi:v1",
  "name": "myApi",
@@ -75,7 +75,7 @@
    "id": "MyBean",
    "type": "object",
    "properties": {
-    "data": {
+    "myData": {
      "type": "string"
     }
    }
