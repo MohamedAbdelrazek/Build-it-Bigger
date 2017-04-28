@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.udacity.gradle.builditbigger.utils.NetworkUtils;
 
 import mohamedabdelrazek.com.androidjokeslib.JokesActivity;
 
@@ -45,7 +47,13 @@ public class MainActivityFragment extends Fragment implements OnJokeReceivedList
             @Override
             public void onClick(View v) {
                 mProgressBar.setVisibility(View.VISIBLE);
-                fetchJoke();
+                if (NetworkUtils.isNetworkAvailable(getContext())) {
+                    fetchJoke();
+                }
+                else{
+                    Toast.makeText(getContext(), "Check your Internet connection!", Toast.LENGTH_SHORT).show();
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                }
             }
         });
         return root;
