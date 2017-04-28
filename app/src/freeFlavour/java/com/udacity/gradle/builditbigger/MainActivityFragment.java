@@ -31,11 +31,16 @@ public class MainActivityFragment extends Fragment implements OnJokeReceivedList
         button = (Button) root.findViewById(R.id.tell_joke_btn);
         mProgressBar= (ProgressBar) root.findViewById(R.id.progressBar);
 
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
+        AdView mAdViewT = (AdView) root.findViewById(R.id.adViewT);
+        AdRequest adRequestT = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
-        mAdView.loadAd(adRequest);
+        mAdViewT.loadAd(adRequestT);
+        AdView mAdViewB = (AdView) root.findViewById(R.id.adViewB);
+        AdRequest adRequestB = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        mAdViewB.loadAd(adRequestB);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
