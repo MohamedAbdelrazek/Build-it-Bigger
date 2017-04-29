@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.udacity.gradle.builditbigger.utils.NetworkUtils;
 
 import mohamedabdelrazek.com.androidjokeslib.JokesActivity;
@@ -23,6 +25,8 @@ import mohamedabdelrazek.com.androidjokeslib.JokesActivity;
 public class MainActivityFragment extends Fragment implements OnJokeReceivedListener {
     private Button button;
     private ProgressBar mProgressBar;
+    InterstitialAd mInterstitialAd;
+
     public MainActivityFragment() {
     }
 
@@ -31,7 +35,7 @@ public class MainActivityFragment extends Fragment implements OnJokeReceivedList
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         button = (Button) root.findViewById(R.id.tell_joke_btn);
-        mProgressBar= (ProgressBar) root.findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) root.findViewById(R.id.progressBar);
 
         AdView mAdViewT = (AdView) root.findViewById(R.id.adViewT);
         AdRequest adRequestT = new AdRequest.Builder()
@@ -40,7 +44,6 @@ public class MainActivityFragment extends Fragment implements OnJokeReceivedList
         mAdViewT.loadAd(adRequestT);
         AdView mAdViewB = (AdView) root.findViewById(R.id.adViewB);
         AdRequest adRequestB = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdViewB.loadAd(adRequestB);
         button.setOnClickListener(new View.OnClickListener() {
@@ -48,17 +51,53 @@ public class MainActivityFragment extends Fragment implements OnJokeReceivedList
             public void onClick(View v) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 if (NetworkUtils.isNetworkAvailable(getContext())) {
+
+
+                    if (mInterstitialAd.isLoaded()) {
+
+                        mInterstitialAd.show();
+                    }
                     fetchJoke();
-                }
-                else{
+                } else {
                     Toast.makeText(getContext(), "Check your Internet connection!", Toast.LENGTH_SHORT).show();
                     mProgressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
+
+        mInterstitialAd = new InterstitialAd(getContext());
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        AdRequest adRequestInt = new AdRequest.Builder().build();
+
+        mInterstitialAd.loadAd(adRequestInt);
+        mInterstitialAd.setAdListener(new AdListener() {
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+
+                Toast.makeText(getContext(), "onAdFailedToLoad", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();                
+            }
+        });
+
+
         return root;
     }
-    public void fetchJoke(){
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    public void fetchJoke() {
 
         new EndpointAsyncTask().execute(this);
     }
@@ -67,10 +106,14 @@ public class MainActivityFragment extends Fragment implements OnJokeReceivedList
     public void onReceived(String joke) {
         startJokeActivity(joke);
     }
+
     private void startJokeActivity(String joke) {
         mProgressBar.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(getActivity(), JokesActivity.class);
         intent.putExtra(Intent.EXTRA_TEXT, joke);
         startActivity(intent);
     }
+
+
+
 }
